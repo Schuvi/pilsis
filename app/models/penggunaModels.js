@@ -1,4 +1,5 @@
 const mysql = require('mysql2/promise');
+const bcrypt = require('bcryptjs');
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -16,7 +17,8 @@ exports.getAllPengguna = async () => {
 
 exports.addPengguna = async () => {
     const {username, password, role} = pengguna;
-    await pool.query('INSERT INTO pengguna (username, password, role) VALUES (?,?,?)', [username, password, role]);
+    const hashedPassword = await bcrypt.hash(password, 15)
+    await pool.query('INSERT INTO pengguna (username, password, role) VALUES (?,?,?)', [username, hashedPassword, role]);
 };
 
 exports.getPenggunaByName = async (username) => {
@@ -32,3 +34,7 @@ exports.updatePengguna = async (id_user, pengguna) => {
 exports.deletePengguna = async (id_user) => {
     await pool.query('DELETE FROM pengguna WHERE id_user = ?', [id_user]);
 }
+
+exports.comparePassword = async (password, hashedPassword) => {
+    return await bcrypt.compare(password, hashedPassword);
+};
