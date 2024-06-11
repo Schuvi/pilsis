@@ -14,16 +14,22 @@ exports.getAllKandidat = async () => {
     return rows;
 };
 
-exports.addKandidat = async () => {
-    const {nama_kandidat, kelas, visi, misi, profiles} = await kandidat;
+exports.addKandidat = async (kandidat) => {
+    const {nama_kandidat, kelas, visi, misi, profiles} = kandidat;
     await pool.query('INSERT INTO kandidat (nama_kandidat, kelas, visi, misi, profile) VALUES (?, ?, ?, ?, ?)', [nama_kandidat, kelas, visi, misi, profiles]);
 };
 
 exports.addPemilih = async () => {
     const {nama_pemilih, kelas, role} = pemilih;
     await pool.query('INSERT INTO pemilih (nama_pemilih, kelas, role) VALUES (?,?,?)', [nama_pemilih, kelas, role]);
-}
+};
 
-exports.getKandidatByName = async => {
-    
-}
+exports.getKandidatByName = async (nama_kandidat) => {
+    const [rows] = await pool.query('SELECT * FROM kandidat WHERE nama_kandidat = ?', [nama_kandidat]);
+    return rows;
+};
+
+exports.updateKandidat = async (id_kandidat, kandidat) => {
+    const {nama_kandidat, kelas, visi, misi, profiles} = kandidat;
+    await pool.query('UPDATE kandidat SET nama_kandidat = ?, kelas = ?, visi = ?, misi = ?, profiles = ? WHERE id_kandidat = ?', [nama_kandidat, kelas, visi, misi, profiles, id_kandidat]);
+};
