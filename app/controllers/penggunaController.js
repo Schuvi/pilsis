@@ -47,7 +47,7 @@ exports.loginPengguna = async (req, res) => {
             return res.redirect('pengguna/login');
         }
 
-        req.session.user = user;
+        req.session.pengguna = pengguna;
         req.flash('success_msg', 'Anda Berhasil Login');
         res.redirect('/');
     } catch (error) {
